@@ -1,0 +1,48 @@
+version: 2.1
+
+executors:
+  golang:
+    working_directory: /go/src/github.com/{{.repoName}}
+    docker:
+      - image: circleci/golang:1.12
+      environment:
+        GO111MODULE: "on"
+
+commands:
+  save_pkg_cache:
+    description: restore go mod cache
+    steps:
+      - save_cache:
+          key: v1-pkg-cache
+          paths:
+            - "/go/pkg"
+
+  restore_pkg_cache:
+    description: restore go mod cache
+    steps:
+      - restore_cache:
+          keys:
+            - v1-pkg-cache
+
+jobs:
+  build:
+    executor: golang
+    steps:
+      - checkout
+      - restore_pkg_cache
+      - run:
+          name: Check compilation
+          command: |
+            make build
+      - save_pkg_cache
+
+  test:
+    executor: golang
+    steps:
+      - checkout
+      - restore_pkg_cache
+      - run:
+          name: Run unit tests
+          command: |
+            trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
+            make test | tee ${TEST_RESULTS}/go-test.out
