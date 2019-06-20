@@ -4,7 +4,7 @@ orbs:
   codecov: codecov/codecov@1.0.1
 
 executors:
-  golang:
+  gogo:
     working_directory: /go/src/github.com/circle-ci-go-boilerplate
     docker:
       - image: circleci/golang:1.12
@@ -29,7 +29,7 @@ commands:
 
 jobs:
   build:
-    executor: golang
+    executor: gogo
     steps:
       - checkout
       - restore_pkg_cache
@@ -40,7 +40,7 @@ jobs:
       - save_pkg_cache
 
   test:
-    executor: golang
+    executor: gogo
     steps:
       - checkout
       - restore_pkg_cache
