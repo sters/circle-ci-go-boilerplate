@@ -5,7 +5,7 @@ orbs:
 
 executors:
   golang:
-    working_directory: /go/src/github.com/{{.repoName}}
+    working_directory: /go/src/github.com/circle-ci-go-boilerplate
     docker:
       - image: circleci/golang:1.12
         environment:
