@@ -10,14 +10,14 @@ GO_ENV := GO111MODULE=on CGO_ENABLED=0
 
 .PHONY: init tidy test build install
 init: 
-	${GO_ENV} go mod init
+	@${GO_ENV} go mod init
 tidy: 
-	${GO_ENV} go mod tidy
+	@${GO_ENV} go mod tidy
 test: 
-	${GO_ENV} go test -v ./...
+	@${GO_ENV} go test -v ./...
 build: 
-	${GO_ENV} go build -o ${BUILD_PATH} ${TOOL_COMMAND_MAIN}
+	@${GO_ENV} go build -o ${BUILD_PATH} ${TOOL_COMMAND_MAIN}
 install:
-	${GO_ENV} go install ${TOOL_PACKAGE}
+	@${GO_ENV} go install ${TOOL_PACKAGE}
 run:
-	${GO_ENV} go run ${TOOL_PACKAGE}
+	@${GO_ENV} go run ${TOOL_PACKAGE}
