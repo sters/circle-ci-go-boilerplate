@@ -14,7 +14,7 @@ init:
 tidy: 
 	@${GO_ENV} go mod tidy
 test: 
-	@${GO_ENV} CGO_ENABLED=1 go test -v -race ./...
+	@${GO_ENV} CGO_ENABLED=1 go test -v -race -cover ./...
 build: 
 	@${GO_ENV} go build -o ${BUILD_PATH} ${TOOL_COMMAND_MAIN}
 install:
