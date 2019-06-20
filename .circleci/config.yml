@@ -1,12 +1,15 @@
 version: 2.1
 
+orbs:
+  codecov: codecov/codecov@1.0.1
+
 executors:
   golang:
     working_directory: /go/src/github.com/{{.repoName}}
     docker:
       - image: circleci/golang:1.12
-      environment:
-        GO111MODULE: "on"
+        environment:
+          GO111MODULE: "on"
 
 commands:
   save_pkg_cache:
@@ -41,8 +44,24 @@ jobs:
     steps:
       - checkout
       - restore_pkg_cache
+      - run: mkdir -p ./build/
       - run:
           name: Run unit tests
           command: |
-            trap "go-junit-report <${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
-            make test | tee ${TEST_RESULTS}/go-test.out
+            PACKAGE_NAMES=$(go list ./... | circleci tests split --split-by=timings --timings-type=classname)
+            gotestsum --junitfile ./build/gotestsum-report.xml -- -coverprofile=./build/coverage.txt $PACKAGE_NAMES
+      - store_artifacts:
+          path: ./build
+          destination: raw-test-output
+      - store_test_results:
+          path: ./build
+      - codecov/upload:
+          file: ./build/coverage.txt
+          flags: "unittests"
+
+workflows:
+  version: 2
+  build-workflow:
+    jobs:
+      - build
+      - test
