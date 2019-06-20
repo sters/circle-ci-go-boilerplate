@@ -8,13 +8,13 @@ BUILD_PATH := ${BUILD_DIR}/${TOOL_COMMAND_NAME}
 
 GO_ENV := GO111MODULE=on CGO_ENABLED=0
 
-.PHONY: init tidy test build install
+.PHONY: init tidy test build install run
 init: 
 	@${GO_ENV} go mod init
 tidy: 
 	@${GO_ENV} go mod tidy
 test: 
-	@${GO_ENV} go test -v ./...
+	@${GO_ENV} CGO_ENABLED=1 go test -v -race ./...
 build: 
 	@${GO_ENV} go build -o ${BUILD_PATH} ${TOOL_COMMAND_MAIN}
 install:
