@@ -1,2 +1,2 @@
 # circle-ci-go-boilerplate
-CircleCI + Go
+Go + Circle CI + Codecov
