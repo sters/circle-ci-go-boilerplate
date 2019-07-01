@@ -1,7 +1,8 @@
-package main
+package print
 
 import "fmt"
 
-func p() {
+// P is shorthand of Print
+func P() {
 	fmt.Println("see hpps://github.com/sters/circle-ci-go-boilerplate")
 }
